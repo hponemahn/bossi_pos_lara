@@ -1,0 +1,87 @@
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A datetime and timezone string in ISO 8601 format `Y-m-dTH:i:sO`, e.g. `2020-04-20T13:53:12+02:00`."
+scalar DateTimeTz @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTimeTz")
+
+type Query {
+    users: [User!]! @all
+    user(id: ID @eq): User @find
+    emailuser(email: String @eq): User @find
+
+    businesscat: [BusinessCategory!]! @all
+
+    townships: [Townships!]! @all
+
+    states: [States!]! @all
+}
+
+type Mutation {
+	login(email: String, password: String): User @field(resolver: "AuthMutator@login")
+
+	signup(
+        name: String
+        business_name: String
+        business_cat_id: String
+        phone: String
+        email: String
+        password: String @hash
+        township_id: Int
+        state_id: Int
+        address: String
+    ): User @field(resolver: "AuthMutator@signup")
+
+     gmail_signup(
+        name: String
+        business_name: String
+        business_cat_id: String
+        phone: String
+        email: String
+        township_id: Int
+        state_id: Int
+        address: String
+        remember_token:String
+    ): User @field(resolver: "AuthMutator@gmail_signup")
+
+}
+
+
+type User {
+    id: ID!
+    name: String!
+    business_name: String
+    phone: String
+    business_cat_id: String
+    state_id: Int
+    township_id: Int
+    email: String!
+    password:String
+    address: String
+    remember_token:String
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type BusinessCategory{
+    id: ID
+    name: String
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type States{
+    id: ID
+    name: String
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Townships{
+    id: ID
+    name: String
+    created_at: DateTime
+    updated_at: DateTime
+}
