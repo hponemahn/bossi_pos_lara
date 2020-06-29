@@ -1,0 +1,10 @@
+#import type.graphql
+#import mutation.graphql
+
+type Query {
+    users: [User!]! @all
+    usersPaginate: [User!]! @paginate
+    user(id: ID @eq): User @find
+}
+
+
