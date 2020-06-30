@@ -5,6 +5,9 @@ type Query {
     users: [User!]! @all
     usersPaginate: [User!]! @paginate
     user(id: ID @eq): User @find
+
+    products: [Product!]! @all
+    detailProduct (id: ID! @eq) : Product @find
 }
 
 

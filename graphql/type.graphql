@@ -11,3 +11,17 @@ type User {
     created_at: DateTime!
     updated_at: DateTime!
 }
+
+type Product {
+    id: ID!
+    name: String!
+    category_id: Int!
+    stock: Int!
+    buy_price: Float!
+    sell_price: Float!
+    discount_price: Float
+    sku: String
+    barcode: String
+    is_damaged: Int
+    remark: String
+}   
