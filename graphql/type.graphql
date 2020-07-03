@@ -25,3 +25,11 @@ type Product {
     is_damaged: Int
     remark: String
 }   
+
+type Order {
+    id: ID!
+    order_date: String!
+    product_id: Int!
+    qty: Int!
+    price: Float!
+}

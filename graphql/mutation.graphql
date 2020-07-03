@@ -1,5 +1,14 @@
 type Mutation{
 
+    createOrder (
+        total: Float!
+        order_date: String!
+        product_id: Int!
+        qty: Int!
+        price: Float!
+    ): String! @field(resolver: "OrderMutation@create")
+
+
     createProduct (
         name: String!
         category_id: Int!
@@ -7,10 +16,10 @@ type Mutation{
         buy_price: Float!
         sell_price: Float!
         discount_price: Float
-        sku: String!
-        barcode: String!
-        is_damaged: Int!
-        remark: String!
+        sku: String
+        barcode: String
+        is_damaged: Int
+        remark: String
     ): Product! @create
 
     updateProduct (
@@ -21,10 +30,10 @@ type Mutation{
         buy_price: Float!
         sell_price: Float!
         discount_price: Float
-        sku: String!
-        barcode: String!
-        is_damaged: Int!
-        remark: String!
+        sku: String
+        barcode: String
+        is_damaged: Int
+        remark: String
     ): Product! @update
 
     deleteProduct (

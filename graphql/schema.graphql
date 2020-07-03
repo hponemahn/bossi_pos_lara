@@ -6,8 +6,16 @@ type Query {
     usersPaginate: [User!]! @paginate
     user(id: ID @eq): User @find
 
-    products: [Product!]! @all
+    products(orderBy: [OrderByClause!] @orderBy): [Product!]! @all
     detailProduct (id: ID! @eq) : Product @find
 }
 
+input OrderByClause{
+    field: String!
+    order: SortOrder!
+}
 
+enum SortOrder {
+    ASC
+    DESC
+}
