@@ -1,0 +1,56 @@
+////create order
+
+mutation{
+  createOrder(input:{
+    total:3000
+    order_date:"2020-06-09 17:49:5"
+    orderdetails:{
+      create:[
+        {
+          product_id:2
+          qty:3
+          price:4000
+        }
+      ]
+    }
+  }){
+    id
+    total
+    order_date
+  }
+}
+
+
+////cerate product
+
+mutation{
+  createProduct(name:"Americano",category_id:2,stock:12,buy_price:1000,sell_price:1500,
+  discount_price:0,sku:"MR-09089",barcode:"110000",is_damaged:0,remark:"Good Quity"){
+    id
+    name
+    category_id
+    stock
+    sku
+    buy_price
+    sell_price
+  }
+}
+
+////edit product
+
+mutation{
+  updateProduct(id:1, name:"Mike", category_id:20){
+    id
+    name
+    created_at
+  }
+}
+
+////login
+
+mutation{
+  login(email:"aye@gmail.com" password:"123456"){
+    id
+    name
+  }
+}

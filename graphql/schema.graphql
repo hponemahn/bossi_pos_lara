@@ -17,6 +17,12 @@ type Query {
     townships: [Townships!]! @all
 
     states: [States!]! @all
+
+    categories: [Category!]! @all
+
+    product(id: ID @eq): Products @find
+
+    products: [Products!]! @all
 }
 
 type Mutation {
@@ -46,8 +52,33 @@ type Mutation {
         remember_token:String
     ): User @field(resolver: "AuthMutator@gmail_signup")
 
+    createProduct(name: String, category_id: Int, stock: Int, buy_price: Int, sell_price: Int, discount_price: Int, sku: String, barcode: String, is_damaged: Int, remark: String): Products @create
+
+    updateProduct(id:ID,name: String, category_id: Int, stock: Int, buy_price: Int, sell_price: Int, discount_price: Int, sku: String, barcode: String, is_damaged: Int, remark: String): Products @update
+
+    createCategory(name: String): Category @create
+    updateCategory(id:ID,name: String): Category @update
+     deleteCategory(id: ID!): Category @delete
+    createOrder(input: CreateOrderInput @spread): Orders @create
+
 }
 
+input CreateOrderInput {
+  total: Int
+  order_date:String
+ orderdetails: CreateDetailBelongsToMany
+}
+
+input CreateDetailBelongsToMany {
+  create: [CreateDetailInput!]
+  
+}
+
+input CreateDetailInput {
+  product_id:Int
+  qty:Int
+  price:Int
+}
 
 type User {
     id: ID!
@@ -82,6 +113,50 @@ type States{
 type Townships{
     id: ID
     name: String
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Products{
+    id: ID
+    name: String
+    category_id: Int
+    stock: Int
+    buy_price: Int
+    sell_price: Int
+    discount_price: Int
+    sku: String
+    barcode: String
+    is_damaged: Int
+    remark: String
+    category: Category @belongsTo
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Category{
+    id: ID
+    name: String
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Orders{
+    id: ID
+    total: Int
+    order_date: String
+    orderdetails: [OrderDetails] @hasMany
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type OrderDetails{
+    id: ID
+    orders_id: Int
+    product_id:Int
+    qty:Int
+    price:Int
+    order: Orders @belongsTo
     created_at: DateTime
     updated_at: DateTime
 }

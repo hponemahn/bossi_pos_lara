@@ -5,6 +5,7 @@ namespace App\GraphQL\Mutations;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\User;
+use App\Products;
 use GraphQL\Error\Error;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
