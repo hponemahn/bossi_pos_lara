@@ -1,0 +1,77 @@
+type Mutation{
+
+    login(email: String, password: String): User @field(resolver: "AuthMutator@login")
+
+	signup(
+        name: String
+        business_name: String
+        business_cat_id: String
+        phone: String
+        email: String
+        password: String @hash
+        township_id: Int
+        state_id: Int
+        address: String
+    ): User @field(resolver: "AuthMutator@signup")
+
+     gmail_signup(
+        name: String
+        business_name: String
+        business_cat_id: String
+        phone: String
+        email: String
+        township_id: Int
+        state_id: Int
+        address: String
+        remember_token:String
+    ): User @field(resolver: "AuthMutator@gmail_signup")
+
+
+    createCategory(name: String): Category @create
+    updateCategory(id:ID,name: String): Category @update
+    deleteCategory(id: ID!): Category @delete
+
+
+    createOrder (
+        total: Float!
+        order_date: String!
+        product_id: Int!
+        qty: Int!
+        price: Float!
+    ): String! @field(resolver: "OrderMutation@create")
+
+
+    createProduct (
+        name: String!
+        category_id: Int!
+        stock: Int!
+        buy_price: Float!
+        sell_price: Float!
+        discount_price: Float
+        sku: String
+        barcode: String
+        is_damaged: Int
+        remark: String
+    ): Product! @create
+
+    updateProduct (
+        id: ID!
+        name: String!
+        category_id: Int!
+        stock: Int!
+        buy_price: Float!
+        sell_price: Float!
+        discount_price: Float
+        sku: String
+        barcode: String
+        is_damaged: Int
+        remark: String
+    ): Product! @update
+
+    deleteProduct (
+        id: ID!
+    ): Product @delete
+
+    
+
+}
