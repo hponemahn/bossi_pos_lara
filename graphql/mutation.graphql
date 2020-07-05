@@ -3,9 +3,7 @@ type Mutation{
     createOrder (
         total: Float!
         order_date: String!
-        product_id: Int!
-        qty: Int!
-        price: Float!
+        products: [OrderInput]!
     ): String! @field(resolver: "OrderMutation@create")
 
 
