@@ -25,24 +25,43 @@ class AuthMutator
      */
      public function login($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-         $user = User::where('email', '=', $args['email'])->first();
+         $user = User::where('email', '=', $args['email'])
+         ->orWhere('phone', '=', $args['phone'])
+         ->first();
         if(!$user)
             return new Error('EMAIL_NOT_FOUND');
 
 
         //Auth
-        $credentials = Arr::only($args, ['email', 'password']);
-
-        if (!Auth::once($credentials))
+        // $credentials = Auth::User('email',$args['email']);
+        if ($args['email'] == null) {
+            if (!Auth::attempt(['phone'=>$args['phone'],'password' => $args['password']]))
             return new Error('LOGIN_FAILS');
 
-        $token = Str::random(60);
+            $token = Str::random(60);
 
-        $user = auth()->user();
-        $user->remember_token = $token;
-        if(!$user->save())
-            return new Error('USER_CANNOT_SAVE');
-        return $user;
+            $user = auth()->user();
+            $user->api_token  = $token;
+            if(!$user->save())
+                return new Error('USER_CANNOT_SAVE');
+            return $user;
+        }
+        else {
+            if (!Auth::attempt(['email'=>$args['email'],'password' => $args['password']]))
+            return new Error('LOGIN_FAILS');
+
+            $token = Str::random(60);
+
+            $user = auth()->user();
+            $user->api_token  = $token;
+            if(!$user->save())
+                return new Error('USER_CANNOT_SAVE');
+            return $user;
+        }
+
+        
+
+        
 
     }
 
@@ -55,7 +74,7 @@ class AuthMutator
         //Auth
         $credentials = Arr::only($args, ['email', 'password']);
         $token = Str::random(60);
-        $user->remember_token = $token;
+        $user->api_token  = $token;
 
 
         if(!$user->save())

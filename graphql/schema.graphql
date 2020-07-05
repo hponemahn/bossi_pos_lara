@@ -7,12 +7,9 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 "A datetime and timezone string in ISO 8601 format `Y-m-dTH:i:sO`, e.g. `2020-04-20T13:53:12+02:00`."
 scalar DateTimeTz @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTimeTz")
 
-type Query {
+type Query @middleware(checks: ["auth:api"]){
     users: [User!]! @all
     user(id: ID @eq): User @find
-    emailuser(email: String @eq): User @find
-
-    businesscat: [BusinessCategory!]! @all
 
     townships: [Townships!]! @all
 
@@ -25,8 +22,14 @@ type Query {
     products: [Products!]! @all
 }
 
+extend type Query {
+    emailuser(email: String @eq): User @find
+
+    businesscat: [BusinessCategory!]! @all
+}
+
 type Mutation {
-	login(email: String, password: String): User @field(resolver: "AuthMutator@login")
+	login(email: String, phone: String, password: String): User @field(resolver: "AuthMutator@login")
 
 	signup(
         name: String
@@ -49,12 +52,19 @@ type Mutation {
         township_id: Int
         state_id: Int
         address: String
-        remember_token:String
+        api_token:String
     ): User @field(resolver: "AuthMutator@gmail_signup")
+    
+
+    }
+
+  extend  type Mutation @middleware(checks: ["auth:api"]){
 
     createProduct(name: String, category_id: Int, stock: Int, buy_price: Int, sell_price: Int, discount_price: Int, sku: String, barcode: String, is_damaged: Int, remark: String): Products @create
 
     updateProduct(id:ID,name: String, category_id: Int, stock: Int, buy_price: Int, sell_price: Int, discount_price: Int, sku: String, barcode: String, is_damaged: Int, remark: String): Products @update
+
+    deleteProduct(id: ID!): Products @delete
 
     createCategory(name: String): Category @create
     updateCategory(id:ID,name: String): Category @update
@@ -92,6 +102,7 @@ type User {
     password:String
     address: String
     remember_token:String
+    api_token:String
     created_at: DateTime!
     updated_at: DateTime!
 }
