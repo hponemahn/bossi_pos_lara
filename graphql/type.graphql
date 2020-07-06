@@ -30,12 +30,22 @@ type Category{
     name: String
     created_at: DateTime
     updated_at: DateTime
+    categories: [Category!]! @all
 }
 
 type User {
-    id: ID!
+     id: ID!
     name: String!
+    business_name: String
+    phone: String
+    business_cat_id: String
+    state_id: Int
+    township_id: Int
     email: String!
+    password:String
+    address: String
+    remember_token:String
+    api_token:String
     created_at: DateTime!
     updated_at: DateTime!
 }
@@ -52,6 +62,7 @@ type Product {
     barcode: String
     is_damaged: Int
     remark: String
+    category: Category @belongsTo
 }   
 
 type Order {

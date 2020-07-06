@@ -1,8 +1,8 @@
 type Mutation{
 
-    login(email: String, password: String): User @field(resolver: "AuthMutator@login")
+        login(email: String, phone: String, password: String): User @field(resolver: "AuthMutator@login")
 
-	signup(
+    signup(
         name: String
         business_name: String
         business_cat_id: String
@@ -23,23 +23,12 @@ type Mutation{
         township_id: Int
         state_id: Int
         address: String
-        remember_token:String
+        api_token:String
     ): User @field(resolver: "AuthMutator@gmail_signup")
 
+}
 
-    createCategory(name: String): Category @create
-    updateCategory(id:ID,name: String): Category @update
-    deleteCategory(id: ID!): Category @delete
-
-
-    createOrder (
-        total: Float!
-        order_date: String!
-        product_id: Int!
-        qty: Int!
-        price: Float!
-    ): String! @field(resolver: "OrderMutation@create")
-
+extend  type Mutation @middleware(checks: ["auth:api"]){
 
     createProduct (
         name: String!
@@ -72,6 +61,36 @@ type Mutation{
         id: ID!
     ): Product @delete
 
-    
+    createCategory(name: String): Category @create
+    updateCategory(id:ID,name: String): Category @update
+     deleteCategory(id: ID!): Category @delete
 
+    createOrders(input: CreateOrderInput @spread): Order @create
+
+    createOrder (
+        total: Float!
+        order_date: String!
+        product_id: Int!
+        qty: Int!
+        price: Float!
+    ): String! @field(resolver: "OrderMutation@create")
+
+}
+
+
+input CreateOrderInput {
+  total: Int
+  order_date:String
+ orderdetails: CreateDetailBelongsToMany
+}
+
+input CreateDetailBelongsToMany {
+  create: [CreateDetailInput!]
+  
+}
+
+input CreateDetailInput {
+  product_id:Int
+  qty:Int
+  price:Int
 }

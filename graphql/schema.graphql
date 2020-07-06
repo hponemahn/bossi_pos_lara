@@ -6,105 +6,27 @@ type Query @middleware(checks: ["auth:api"]){
     user(id: ID @eq): User @find
     usersPaginate: [User!]! @paginate
     user(id: ID @eq): User @find
-    emailuser(email: String @eq): User @find
-    businesscat: [BusinessCategory!]! @all
-    townships: [Townships!]! @all
-    states: [States!]! @all
-
+   
+    categories: [Category!]! @all
 
     products(orderBy: [OrderByClause!] @orderBy): [Product!]! @all
-    product(id: ID @eq): Products @find
+    product(id: ID @eq): Product @find
     detailProduct (id: ID! @eq) : Product @find
 
-    products: [Products!]! @all
+    productes: [Product!]! @all
+
+    
 }
 
-extend type Query {
+extend type Query{
     emailuser(email: String @eq): User @find
 
+    townships: [Townships!]! @all
+    
+    states: [States!]! @all
+
     businesscat: [BusinessCategory!]! @all
-}
-
-
-input CreateOrderInput {
-  total: Int
-  order_date:String
- orderdetails: CreateDetailBelongsToMany
-}
-
-input CreateDetailBelongsToMany {
-  create: [CreateDetailInput!]
-  
-}
-
-input CreateDetailInput {
-  product_id:Int
-  qty:Int
-  price:Int
-}
-
-type User {
-    id: ID!
-    name: String!
-    business_name: String
-    phone: String
-    business_cat_id: String
-    state_id: Int
-    township_id: Int
-    email: String!
-    password:String
-    address: String
-    remember_token:String
-    api_token:String
-    created_at: DateTime!
-    updated_at: DateTime!
-}
-
-type BusinessCategory{
-    id: ID
-    name: String
-    created_at: DateTime
-    updated_at: DateTime
-}
-
-type States{
-    id: ID
-    name: String
-    created_at: DateTime
-    updated_at: DateTime
-}
-
-type Townships{
-    id: ID
-    name: String
-    created_at: DateTime
-    updated_at: DateTime
-}
-
-type Products{
-    id: ID
-    name: String
-    category_id: Int
-    stock: Int
-    buy_price: Int
-    sell_price: Int
-    discount_price: Int
-    sku: String
-    barcode: String
-    is_damaged: Int
-    remark: String
-    category: Category @belongsTo
-    created_at: DateTime
-    updated_at: DateTime
-}
-
-type Category{
-    id: ID
-    name: String
-    created_at: DateTime
-    updated_at: DateTime
-
-    categories: [Category!]! @all
+    
 }
 
 input OrderByClause{
