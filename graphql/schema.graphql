@@ -21,7 +21,7 @@ type Query @middleware(checks: ["auth:api"]){
 extend type Query{
     emailuser(email: String @eq): User @find
 
-    townships: [Townships!]! @all
+    townships (state_id: String @eq): [Townships] @all
     
     states: [States!]! @all
 
