@@ -17,6 +17,9 @@ class CreateMigrationsTable extends Migration
      */
     public function up()
     {
+        
+        Schema::dropIfExists('migrations');
+
         Schema::create('migrations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('migration', 255);
