@@ -30,6 +30,12 @@ type Mutation{
 
 extend  type Mutation @middleware(checks: ["auth:api"]){
 
+    createOrder (
+        total: Float!
+        order_date: String!
+        products: [OrderInput]!
+    ): String! @field(resolver: "OrderMutation@create")
+
     createProduct (
         name: String!
         category_id: Int!

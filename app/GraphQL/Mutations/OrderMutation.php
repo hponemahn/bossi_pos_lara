@@ -13,12 +13,15 @@ class OrderMutation
     {
         $order = Order::create(['total' => $args['total'], 'order_date' => $args['order_date']]);
 
-        \DB::table('order_details')->insert([
-            'order_id' => $order->id,
-            'product_id' => $args['product_id'],
-            'qty' => $args['qty'],
-            'price' => $args['price'],
-        ]);
+        for ($i=0; $i < count($args['products']); $i++) { 
+            // $args['products'][$i]['qty'];
+            \DB::table('order_details')->insert([
+                'order_id' => $order->id,
+                'product_id' => $args['products'][$i]['product_id'],
+                'qty' => $args['products'][$i]['qty'],
+                'price' => $args['products'][$i]['price'],
+            ]);
+        }
 
         return "success";
     }

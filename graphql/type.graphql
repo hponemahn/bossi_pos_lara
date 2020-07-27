@@ -68,6 +68,9 @@ type Product {
 type Order {
     id: ID!
     order_date: String!
+}
+
+input OrderInput {
     product_id: Int!
     qty: Int!
     price: Float!
