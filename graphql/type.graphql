@@ -28,6 +28,7 @@ type Product {
 
 type Order {
     id: ID!
+    total: Float
     order_date: String!
 }
 

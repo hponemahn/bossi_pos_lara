@@ -8,6 +8,8 @@ type Query {
 
     products(orderBy: [OrderByClause!] @orderBy): [Product!]! @all
     detailProduct (id: ID! @eq) : Product @find
+
+    orderForSevenDays: [Order!]! @field(resolver: "OrderQuery@orderForSevenDays")
 }
 
 input OrderByClause{
