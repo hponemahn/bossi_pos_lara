@@ -10,6 +10,7 @@ type Query {
     detailProduct (id: ID! @eq) : Product @find
 
     orderForSevenDays: [Order!]! @field(resolver: "OrderQuery@orderForSevenDays")
+    netForFiveMonths: [NetForFiveMonths!]! @field(resolver: "OrderQuery@netForFiveMonths")
 }
 
 input OrderByClause{

@@ -37,3 +37,11 @@ input OrderInput {
     qty: Int!
     price: Float!
 }
+
+type NetForFiveMonths {
+    id: ID!
+    total: Float
+    year: String!
+    months: String!
+    month: String!
+}

@@ -17,15 +17,19 @@ use Illuminate\Support\Facades\DB;
 
 Route::get('/test', function () {
 
-    return $users = DB::table('orders')
-  ->select("total", DB::raw("
-  DATE_FORMAT(order_date,'%W-%d') as order_date")
-)->whereDate('order_date', '>', date('Y-m-d',strtotime("-7 days")))->orderBy(DB::raw("
-DATE_FORMAT(order_date,'%d')"), 'asc')->get();
+    return \App\Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%y') year"),DB::raw('MONTH(order_date) months'),  DB::raw('MONTHNAME(order_date) month'))
+        ->groupby('month', 'year', 'months')
+        ->orderBy('year', 'ASC')
+        ->orderBy('months', 'ASC')
+        ->get();
 
-    return DB::table('orders')->select("total", DB::raw("DATE_FORMAT(order_date,'%Y-%m')"))->whereDate('order_date', '>', date('Y-m-d',strtotime("-7 days")))->get();
+    // return DB::table('orders')
+    //         ->select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date,'%M-%y') as monY"))
+    //         ->groupby('monY')
+    //         ->orderBy('monY', 'desc')
+    //         ->get();
 
-    // return DB::table('orders')->selectRaw("total, DATE_FORMAT('order_date', '%d/%l/%Y') as order_date")->whereDate('order_date', '>', date('Y-m-d',strtotime("-7 days")))->orderBy('order_date','asc')->get();
+            // , DB::raw("DATE_FORMAT(order_date,'%m') as orderM")
 });
 
 Route::get('/', function () {
