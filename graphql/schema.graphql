@@ -19,6 +19,8 @@ type Query @middleware(checks: ["auth:api"]){
 }
 
 extend type Query{
+    roles: [Roles!]! @all
+
     emailuser(email: String @eq): User @find
 
     townships (state_id: String @eq): [Townships] @all
