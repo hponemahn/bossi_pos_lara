@@ -14,8 +14,8 @@ type Query @middleware(checks: ["auth:api"]){
     detailProduct (id: ID! @eq) : Product @find
 
     productes: [Product!]! @all
-
-    
+    orderForSevenDays: [Order!]! @field(resolver: "OrderQuery@orderForSevenDays")
+    netForFiveMonths: [NetForFiveMonths!]! @field(resolver: "OrderQuery@netForFiveMonths")
 }
 
 extend type Query{
@@ -28,7 +28,6 @@ extend type Query{
     states: [States!]! @all
 
     businesscat: [BusinessCategory!]! @all
-    
 }
 
 input OrderByClause{

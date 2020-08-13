@@ -76,6 +76,7 @@ type Product {
 
 type Order {
     id: ID!
+    total: Float
     order_date: String!
 }
 
@@ -83,4 +84,12 @@ input OrderInput {
     product_id: Int!
     qty: Int!
     price: Float!
+}
+
+type NetForFiveMonths {
+    id: ID!
+    total: Float
+    year: String!
+    months: String!
+    month: String!
 }
