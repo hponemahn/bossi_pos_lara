@@ -45,3 +45,11 @@ type NetForFiveMonths {
     months: String!
     month: String!
 }
+
+type LostForFiveMonths {
+    id: ID!
+    total: Float
+    year: String!
+    months: String!
+    month: String!
+}
