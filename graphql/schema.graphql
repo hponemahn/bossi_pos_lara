@@ -16,6 +16,7 @@ type Query @middleware(checks: ["auth:api"]){
     productes: [Product!]! @all
     orderForSevenDays: [Order!]! @field(resolver: "OrderQuery@orderForSevenDays")
     netForFiveMonths: [NetForFiveMonths!]! @field(resolver: "OrderQuery@netForFiveMonths")
+    lostForFiveMonths: [LostForFiveMonths!]! @field(resolver: "OrderQuery@lostForFiveMonths")
 }
 
 extend type Query{
