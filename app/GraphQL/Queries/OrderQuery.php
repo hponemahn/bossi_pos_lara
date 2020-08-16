@@ -3,7 +3,7 @@
 namespace App\GraphQL\Queries;
 use App\Order;
 use App\Product;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class OrderQuery
@@ -52,5 +52,17 @@ class OrderQuery
       ->get()
       ->reverse()
       ->all();
+    }
+
+    public function saleForFour($_, array $args)
+    {
+      return DB::table("orders")
+              ->join("order_details", "orders.id", "=", "order_details.order_id")
+              ->join("products", "order_details.product_id", "=", "products.id")
+              ->join("categories", "products.category_id", "=", "categories.id")
+              ->select("categories.name as name", DB::raw('SUM(orders.total) as total'))
+              ->groupBy("name")
+              ->limit(4)
+              ->get();
     }
 }

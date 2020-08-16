@@ -20,19 +20,14 @@ use App\Product;
 
 Route::get('/test', function () {
 
-    $dateS = Carbon::now()->startOfMonth()->subMonth(5);
-    $dateE = Carbon::now()->startOfMonth()->addMonths(1);
-
-    return $order = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"),DB::raw('MONTH(created_at) months'),  DB::raw('MONTHNAME(created_at) month'))
-    ->whereBetween('created_at', [$dateS, $dateE])
-    ->groupby('month', 'year', 'months')
-    ->orderBy('year', 'DESC')
-    ->orderBy('months', 'DESC')
-    ->limit(5)
-    ->get()
-    ->reverse()
-    ->all();
-
+    return DB::table("orders")
+    ->join("order_details", "orders.id", "=", "order_details.order_id")
+    ->join("products", "order_details.product_id", "=", "products.id")
+    ->join("categories", "products.category_id", "=", "categories.id")
+    ->select("categories.name as name", DB::raw('SUM(orders.total) as total'))
+    ->groupBy("name")
+    ->limit(4)
+    ->get();
 });
 
 Route::get('/', function () {
