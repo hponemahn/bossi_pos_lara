@@ -56,7 +56,7 @@ class OrderQuery
 
     public function saleForFour($_, array $args)
     {
-      return DB::table("orders")
+      $res = DB::table("orders")
               ->join("order_details", "orders.id", "=", "order_details.order_id")
               ->join("products", "order_details.product_id", "=", "products.id")
               ->join("categories", "products.category_id", "=", "categories.id")
@@ -64,5 +64,11 @@ class OrderQuery
               ->groupBy("name")
               ->limit(4)
               ->get();
+
+      $object = new \stdClass();
+      $object->all = $res->sum('total');
+      $res[] = $object;
+  
+      return $res;        
     }
 }

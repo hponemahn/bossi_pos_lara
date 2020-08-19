@@ -20,14 +20,21 @@ use App\Product;
 
 Route::get('/test', function () {
 
-    return DB::table("orders")
-    ->join("order_details", "orders.id", "=", "order_details.order_id")
-    ->join("products", "order_details.product_id", "=", "products.id")
-    ->join("categories", "products.category_id", "=", "categories.id")
-    ->select("categories.name as name", DB::raw('SUM(orders.total) as total'))
-    ->groupBy("name")
-    ->limit(4)
-    ->get();
+    $res = DB::table("orders")
+              ->join("order_details", "orders.id", "=", "order_details.order_id")
+              ->join("products", "order_details.product_id", "=", "products.id")
+              ->join("categories", "products.category_id", "=", "categories.id")
+              ->select("categories.name as name", DB::raw('SUM(orders.total) as total'))
+              ->groupBy("name")
+              ->limit(4)
+              ->get();
+    
+    $object = new \stdClass();
+    $object->all_total = $res->sum('total');
+    $res[] = $object;
+
+    return $res;
+
 });
 
 Route::get('/', function () {

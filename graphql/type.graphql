@@ -55,6 +55,7 @@ type LostForFiveMonths {
 }
 
 type SaleForFour {
-    name: String!
+    name: String
     total: Float
+    all: Float
 }
