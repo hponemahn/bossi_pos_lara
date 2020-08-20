@@ -15,10 +15,13 @@ class OrderQuery
     public function orderForSevenDays($_, array $args)
     {
         return DB::table('orders')
-        ->select("total", DB::raw("
-        DATE_FORMAT(order_date,'%W-%d') as order_date")
-      )->whereDate('order_date', '>', date('Y-m-d',strtotime("-7 days")))->orderBy(DB::raw("
-      DATE_FORMAT(order_date,'%d')"), 'asc')->get();
+        ->select(DB::raw("
+        DATE_FORMAT(order_date,'%W-%d') as order_date"), DB::raw("SUM(total) as total"))
+        ->whereDate('order_date', '>', date('Y-m-d',strtotime("-7 days")))->orderBy(DB::raw("
+      DATE_FORMAT(order_date,'%d')"), 'asc')
+        ->groupby(DB::raw("
+        DATE_FORMAT(order_date,'%W-%d')"))
+        ->get();
     }
 
     public function netForFiveMonths($_, array $args)
