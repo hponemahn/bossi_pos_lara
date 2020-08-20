@@ -13,6 +13,7 @@ type Query {
     netForFiveMonths: [NetForFiveMonths!]! @field(resolver: "OrderQuery@netForFiveMonths")
     lostForFiveMonths: [LostForFiveMonths!]! @field(resolver: "OrderQuery@lostForFiveMonths")
     saleForFour: [SaleForFour!]! @field(resolver: "OrderQuery@saleForFour")
+    buyForFour: [SaleForFour!]! @field(resolver: "OrderQuery@buyForFour")
 }
 
 input OrderByClause{

@@ -65,6 +65,7 @@ class OrderQuery
               ->join("categories", "products.category_id", "=", "categories.id")
               ->select("categories.name as name", DB::raw('SUM(orders.total) as total'))
               ->groupBy("name")
+              ->orderby("orders.order_date", "asc")
               ->limit(4)
               ->get();
 
@@ -73,5 +74,22 @@ class OrderQuery
       $res[] = $object;
   
       return $res;        
+    }
+
+    public function buyForFour($_, array $args)
+    {
+      $res = DB::table("products")
+      ->join("categories", "products.category_id", "=", "categories.id")
+      ->select("categories.name as name", DB::raw('SUM(products.buy_price) as total'))
+      ->groupBy("name")
+      ->orderby("products.created_at", "desc")
+      ->limit(4)
+      ->get();
+
+      $object = new \stdClass();
+      $object->all = $res->sum('total');
+      $res[] = $object;
+
+      return $res;   
     }
 }
