@@ -3,7 +3,7 @@
 namespace App\GraphQL\Queries;
 use App\Order;
 use App\Product;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class OrderQuery
@@ -15,10 +15,13 @@ class OrderQuery
     public function orderForSevenDays($_, array $args)
     {
         return DB::table('orders')
-        ->select("total", DB::raw("
-        DATE_FORMAT(order_date,'%W-%d') as order_date")
-      )->whereDate('order_date', '>', date('Y-m-d',strtotime("-7 days")))->orderBy(DB::raw("
-      DATE_FORMAT(order_date,'%d')"), 'asc')->get();
+        ->select(DB::raw("
+        DATE_FORMAT(order_date,'%W-%d') as order_date"), DB::raw("SUM(total) as total"))
+        ->whereDate('order_date', '>', date('Y-m-d',strtotime("-7 days")))->orderBy(DB::raw("
+      DATE_FORMAT(order_date,'%d')"), 'asc')
+        ->groupby(DB::raw("
+        DATE_FORMAT(order_date,'%W-%d')"))
+        ->get();
     }
 
     public function netForFiveMonths($_, array $args)
@@ -52,5 +55,23 @@ class OrderQuery
       ->get()
       ->reverse()
       ->all();
+    }
+
+    public function saleForFour($_, array $args)
+    {
+      $res = DB::table("orders")
+              ->join("order_details", "orders.id", "=", "order_details.order_id")
+              ->join("products", "order_details.product_id", "=", "products.id")
+              ->join("categories", "products.category_id", "=", "categories.id")
+              ->select("categories.name as name", DB::raw('SUM(orders.total) as total'))
+              ->groupBy("name")
+              ->limit(4)
+              ->get();
+
+      $object = new \stdClass();
+      $object->all = $res->sum('total');
+      $res[] = $object;
+  
+      return $res;        
     }
 }

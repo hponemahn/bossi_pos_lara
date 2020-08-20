@@ -101,3 +101,9 @@ type LostForFiveMonths {
     months: String!
     month: String!
 }
+
+type SaleForFour {
+    name: String
+    total: Float
+    all: Float
+}
