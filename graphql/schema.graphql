@@ -19,6 +19,7 @@ type Query @middleware(checks: ["auth:api"]){
     lostForFiveMonths: [LostForFiveMonths!]! @field(resolver: "OrderQuery@lostForFiveMonths")
     saleForFour: [SaleForFour!]! @field(resolver: "OrderQuery@saleForFour")
     buyForFour: [SaleForFour!]! @field(resolver: "OrderQuery@buyForFour")
+    stockForFour: [SaleForFour!]! @field(resolver: "OrderQuery@stockForFour")
 }
 
 extend type Query{
