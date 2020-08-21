@@ -22,15 +22,15 @@ Route::get('/test', function () {
 
     $res = DB::table("products")
               ->join("categories", "products.category_id", "=", "categories.id")
-              ->select("categories.name as name", DB::raw('SUM(products.buy_price) as total'))
+              ->select("categories.name as name", DB::raw('SUM(products.stock) as total'))
               ->groupBy("name")
               ->limit(4)
               ->orderby("products.created_at", "desc")
               ->get();
 
-      $object = new \stdClass();
-      $object->all = $res->sum('total');
-      $res[] = $object;
+    //   $object = new \stdClass();
+    //   $object->all = $res->sum('total');
+    //   $res[] = $object;
   
       return $res;    
 
