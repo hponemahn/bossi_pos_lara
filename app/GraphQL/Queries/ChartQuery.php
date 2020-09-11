@@ -6,12 +6,64 @@ use App\Product;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class OrderQuery
+class ChartQuery
 {
     /**
      * @param  null  $_
      * @param  array<string, mixed>  $args
      */
+    public function getCapital($_, array $args)
+    {
+      // $dateS = Carbon::now()->startOfMonth()->subMonth(5);
+      // $dateE = Carbon::now()->startOfMonth()->addMonths(1);
+      $res;
+      
+      if ($args['filter'] == "y") {
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"))
+        ->groupby('year')
+        ->orderBy('year', 'DESC')
+        ->get()
+        ->all();  
+      } elseif ($args['filter'] == "d") {
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%d') day"), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw('MONTHNAME(created_at) month'), DB::raw('MONTH(created_at) months'))
+        ->groupby('day', 'month', 'year', 'months')
+        ->orderBy('year', 'DESC')
+        ->orderBy('months', 'DESC')
+        ->orderBy('day', 'DESC')
+        ->get()
+        ->all();  
+      } else {
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw('MONTHNAME(created_at) month'), DB::raw('MONTH(created_at) months'))
+        // ->whereBetween('created_at', [$dateS, $dateE])
+        ->groupby('month', 'year', 'months')
+        ->orderBy('year', 'DESC')
+        ->orderBy('months', 'DESC')
+        // ->limit(5)
+        ->get()
+        // ->reverse()
+        ->all();   
+      }
+
+      return $res;
+    }
+
+    public function getNet($_, array $args)
+    {
+      
+      // $dateS = Carbon::now()->startOfMonth()->subMonth(5);
+      // $dateE = Carbon::now()->startOfMonth()->addMonths(1);
+
+      return $order = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%Y') year"),DB::raw('MONTH(order_date) months'),  DB::raw('MONTHNAME(order_date) month'))
+      // ->whereBetween('order_date', [$dateS, $dateE])
+      ->groupby('month', 'year', 'months')
+      ->orderBy('year', 'DESC')
+      ->orderBy('months', 'DESC')
+      ->limit(5)
+      ->get()
+      ->reverse()
+      ->all();
+    }
+
     public function orderForSevenDays($_, array $args)
     {
         return DB::table('orders')

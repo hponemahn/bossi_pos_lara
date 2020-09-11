@@ -9,12 +9,14 @@ type Query {
     products(orderBy: [OrderByClause!] @orderBy): [Product!]! @all
     detailProduct (id: ID! @eq) : Product @find
 
-    orderForSevenDays: [Order!]! @field(resolver: "OrderQuery@orderForSevenDays")
-    netForFiveMonths: [NetForFiveMonths!]! @field(resolver: "OrderQuery@netForFiveMonths")
-    lostForFiveMonths: [LostForFiveMonths!]! @field(resolver: "OrderQuery@lostForFiveMonths")
-    saleForFour: [SaleForFour!]! @field(resolver: "OrderQuery@saleForFour")
-    buyForFour: [SaleForFour!]! @field(resolver: "OrderQuery@buyForFour")
-    stockForFour: [SaleForFour!]! @field(resolver: "OrderQuery@stockForFour")
+    orderForSevenDays: [Order!]! @field(resolver: "ChartQuery@orderForSevenDays")
+    netForFiveMonths: [NetForFiveMonths!]! @field(resolver: "ChartQuery@netForFiveMonths")
+    lostForFiveMonths: [LostForFiveMonths!]! @field(resolver: "ChartQuery@lostForFiveMonths")
+    saleForFour: [SaleForFour!]! @field(resolver: "ChartQuery@saleForFour")
+    buyForFour: [SaleForFour!]! @field(resolver: "ChartQuery@buyForFour")
+    stockForFour: [SaleForFour!]! @field(resolver: "ChartQuery@stockForFour")
+    capital(filter: String): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getCapital")
+    net: [NetForFiveMonths!]! @field(resolver: "ChartQuery@getNet")
 }
 
 input OrderByClause{

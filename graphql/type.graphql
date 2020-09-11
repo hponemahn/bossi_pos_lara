@@ -41,9 +41,10 @@ input OrderInput {
 type NetForFiveMonths {
     id: ID!
     total: Float
-    year: String!
-    months: String!
-    month: String!
+    day: String
+    months: String
+    month: String
+    year: String
 }
 
 type LostForFiveMonths {
