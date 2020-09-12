@@ -47,21 +47,41 @@ class ChartQuery
       return $res;
     }
 
-    public function getNet($_, array $args)
+    public function getProfit($_, array $args)
     {
       
       // $dateS = Carbon::now()->startOfMonth()->subMonth(5);
       // $dateE = Carbon::now()->startOfMonth()->addMonths(1);
 
-      return $order = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%Y') year"),DB::raw('MONTH(order_date) months'),  DB::raw('MONTHNAME(order_date) month'))
-      // ->whereBetween('order_date', [$dateS, $dateE])
-      ->groupby('month', 'year', 'months')
-      ->orderBy('year', 'DESC')
-      ->orderBy('months', 'DESC')
-      ->limit(5)
-      ->get()
-      ->reverse()
-      ->all();
+      $res;
+      
+      if ($args['filter'] == "y") {
+        $res = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%Y') year"))
+        ->groupby('year')
+        ->orderBy('year', 'DESC')
+        ->get()
+        ->all();  
+      } elseif ($args['filter'] == "d") {
+        $res = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%d') day"), DB::raw("DATE_FORMAT(order_date, '%Y') year"), DB::raw('MONTHNAME(order_date) month'), DB::raw('MONTH(order_date) months'))
+        ->groupby('day', 'month', 'year', 'months')
+        ->orderBy('year', 'DESC')
+        ->orderBy('months', 'DESC')
+        ->orderBy('day', 'DESC')
+        ->get()
+        ->all();  
+      } else {
+        $res = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%Y') year"), DB::raw('MONTHNAME(order_date) month'), DB::raw('MONTH(order_date) months'))
+        // ->whereBetween('order_date', [$dateS, $dateE])
+        ->groupby('month', 'year', 'months')
+        ->orderBy('year', 'DESC')
+        ->orderBy('months', 'DESC')
+        // ->limit(5)
+        ->get()
+        // ->reverse()
+        ->all();   
+      }
+
+      return $res;
     }
 
     public function orderForSevenDays($_, array $args)
