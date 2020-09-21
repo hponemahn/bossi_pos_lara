@@ -25,7 +25,7 @@ class ChartQuery
         ->get()
         ->all();  
       } elseif ($args['filter'] == "d") {
-        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%d') day"), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw('MONTHNAME(created_at) month'), DB::raw('MONTH(created_at) months'))
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%d') day"), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw("DATE_FORMAT(created_at, '%m') month"), DB::raw('MONTH(created_at) months'))
         ->groupby('day', 'month', 'year', 'months')
         ->orderBy('year', 'DESC')
         ->orderBy('months', 'DESC')
@@ -33,7 +33,7 @@ class ChartQuery
         ->get()
         ->all();  
       } else {
-        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw('MONTHNAME(created_at) month'), DB::raw('MONTH(created_at) months'))
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw("DATE_FORMAT(created_at, '%m') month"), DB::raw('MONTH(created_at) months'))
         // ->whereBetween('created_at', [$dateS, $dateE])
         ->groupby('month', 'year', 'months')
         ->orderBy('year', 'DESC')
@@ -62,7 +62,7 @@ class ChartQuery
         ->get()
         ->all();  
       } elseif ($args['filter'] == "d") {
-        $res = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%d') day"), DB::raw("DATE_FORMAT(order_date, '%Y') year"), DB::raw('MONTHNAME(order_date) month'), DB::raw('MONTH(order_date) months'))
+        $res = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%d') day"), DB::raw("DATE_FORMAT(order_date, '%Y') year"), DB::raw("DATE_FORMAT(order_date, '%m') month"), DB::raw('MONTH(order_date) months'))
         ->groupby('day', 'month', 'year', 'months')
         ->orderBy('year', 'DESC')
         ->orderBy('months', 'DESC')
@@ -70,7 +70,7 @@ class ChartQuery
         ->get()
         ->all();  
       } else {
-        $res = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%Y') year"), DB::raw('MONTHNAME(order_date) month'), DB::raw('MONTH(order_date) months'))
+        $res = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%Y') year"), DB::raw("DATE_FORMAT(order_date, '%m') month"), DB::raw('MONTH(order_date) months'))
         // ->whereBetween('order_date', [$dateS, $dateE])
         ->groupby('month', 'year', 'months')
         ->orderBy('year', 'DESC')
@@ -93,24 +93,42 @@ class ChartQuery
       $res;
       
       if ($args['filter'] == "y") {
-        $res = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%Y') year"))
+
+        $res = DB::table('orders')
+        ->join("order_details", "orders.id", "=", "order_details.order_id")
+        ->join("products", "order_details.product_id", "=", "products.id")
+        ->select(DB::raw('SUM((order_details.qty * order_details.price) - (order_details.qty * products.buy_price)) as total'), DB::raw("DATE_FORMAT(orders.order_date, '%Y') year"))
+        // DB::raw('SUM((buy_price - discount_price) - sell_price) as total')
+        // ->whereBetween('order_date', [$dateS, $dateE])
         ->groupby('year')
         ->orderBy('year', 'DESC')
+        // ->limit(5)
         ->get()
+        // ->reverse()
         ->all();  
+
       } elseif ($args['filter'] == "d") {
-        $res = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%d') day"), DB::raw("DATE_FORMAT(order_date, '%Y') year"), DB::raw('MONTHNAME(order_date) month'), DB::raw('MONTH(order_date) months'))
+
+        $res = DB::table('orders')
+        ->join("order_details", "orders.id", "=", "order_details.order_id")
+        ->join("products", "order_details.product_id", "=", "products.id")
+        ->select(DB::raw('SUM((order_details.qty * order_details.price) - (order_details.qty * products.buy_price)) as total'), DB::raw("DATE_FORMAT(order_date, '%d') day"), DB::raw("DATE_FORMAT(orders.order_date, '%Y') year"), DB::raw("DATE_FORMAT(orders.order_date, '%m') month"), DB::raw('MONTH(orders.order_date) months'))
+        // DB::raw('SUM((buy_price - discount_price) - sell_price) as total')
+        // ->whereBetween('order_date', [$dateS, $dateE])
         ->groupby('day', 'month', 'year', 'months')
         ->orderBy('year', 'DESC')
         ->orderBy('months', 'DESC')
         ->orderBy('day', 'DESC')
+        // ->limit(5)
         ->get()
+        // ->reverse()
         ->all();  
+
       } else {
         $res = DB::table('orders')
         ->join("order_details", "orders.id", "=", "order_details.order_id")
         ->join("products", "order_details.product_id", "=", "products.id")
-        ->select(DB::raw('SUM((order_details.qty * order_details.price) - (order_details.qty * products.buy_price)) as total'), DB::raw("DATE_FORMAT(orders.order_date, '%Y') year"), DB::raw('MONTHNAME(orders.order_date) month'), DB::raw('MONTH(orders.order_date) months'))
+        ->select(DB::raw('SUM((order_details.qty * order_details.price) - (order_details.qty * products.buy_price)) as total'), DB::raw("DATE_FORMAT(orders.order_date, '%Y') year"), DB::raw("DATE_FORMAT(orders.order_date, '%m') month"), DB::raw('MONTH(orders.order_date) months'))
         // DB::raw('SUM((buy_price - discount_price) - sell_price) as total')
         // ->whereBetween('order_date', [$dateS, $dateE])
         ->groupby('month', 'year', 'months')
@@ -143,7 +161,7 @@ class ChartQuery
       $dateS = Carbon::now()->startOfMonth()->subMonth(5);
       $dateE = Carbon::now()->startOfMonth()->addMonths(1);
 
-      return $order = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%Y') year"),DB::raw('MONTH(order_date) months'),  DB::raw('MONTHNAME(order_date) month'))
+      return $order = Order::select(DB::raw('SUM(total) as total'), DB::raw("DATE_FORMAT(order_date, '%Y') year"),DB::raw('MONTH(order_date) months'),  DB::raw("DATE_FORMAT(order_date, '%m') month"))
       ->whereBetween('order_date', [$dateS, $dateE])
       ->groupby('month', 'year', 'months')
       ->orderBy('year', 'DESC')
@@ -159,7 +177,7 @@ class ChartQuery
       $dateS = Carbon::now()->startOfMonth()->subMonth(5);
       $dateE = Carbon::now()->startOfMonth()->addMonths(1);
   
-      return $order = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"),DB::raw('MONTH(created_at) months'),  DB::raw('MONTHNAME(created_at) month'))
+      return $order = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"),DB::raw('MONTH(created_at) months'),  DB::raw("DATE_FORMAT(created_at, '%m') month"))
       ->whereBetween('created_at', [$dateS, $dateE])
       ->groupby('month', 'year', 'months')
       ->orderBy('year', 'DESC')
