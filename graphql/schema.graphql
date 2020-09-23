@@ -27,7 +27,7 @@ extend type Query{
 
     emailuser(email: String @eq): User @find
 
-    townships (state_id: String @eq): [Townships] @all
+    townships (state_id: Int @eq): [Townships] @all
     
     states: [States!]! @all
 

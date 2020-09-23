@@ -70,6 +70,7 @@ class AuthMutator
         $user = new User($args);
         $user->business_name = $args['business_name'];
         $user->state_id = $args['state_id'];
+        $user->role_id = $args['role_id'];
        
         //Auth
         $credentials = Arr::only($args, ['email', 'password']);
