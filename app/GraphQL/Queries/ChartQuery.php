@@ -16,9 +16,41 @@ class ChartQuery
     {
       // $dateS = Carbon::now()->startOfMonth()->subMonth(5);
       // $dateE = Carbon::now()->startOfMonth()->addMonths(1);
+
+      $time = strtotime($args['endDate']);
+      $dateE = date("Y-m-d", strtotime("+1 month", $time));
       $res;
       
-      if ($args['filter'] == "y") {
+      if($args['startDate'] != "0" && $args['endDate'] != "0" && $args['filter'] == "m"){
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw("DATE_FORMAT(created_at, '%m') month"), DB::raw('MONTH(created_at) months'))
+        ->whereBetween('created_at', [$args['startDate'], $dateE])
+        ->groupby('month', 'year', 'months')
+        ->orderBy('year', 'DESC')
+        ->orderBy('months', 'DESC')
+        // ->limit(5)
+        ->get()
+        // ->reverse()
+        ->all();   
+
+      } elseif ($args['startDate'] != "0" && $args['endDate'] != "0" && $args['filter'] == "y") {
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"))
+        ->whereBetween('created_at', [$args['startDate'], $dateE])
+        ->groupby('year')
+        ->orderBy('year', 'DESC')
+        ->get()
+        ->all(); 
+        
+      } elseif ($args['startDate'] != "0" && $args['endDate'] != "0" && $args['filter'] == "d") {
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%d') day"), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw("DATE_FORMAT(created_at, '%m') month"), DB::raw('MONTH(created_at) months'))
+        ->whereBetween('created_at', [$args['startDate'], $dateE])
+        ->groupby('day', 'month', 'year', 'months')
+        ->orderBy('year', 'DESC')
+        ->orderBy('months', 'DESC')
+        ->orderBy('day', 'DESC')
+        ->get()
+        ->all();  
+        
+      } elseif ($args['filter'] == "y") {
         $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"))
         ->groupby('year')
         ->orderBy('year', 'DESC')

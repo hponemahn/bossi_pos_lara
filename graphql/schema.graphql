@@ -15,7 +15,7 @@ type Query {
     saleForFour: [SaleForFour!]! @field(resolver: "ChartQuery@saleForFour")
     buyForFour: [SaleForFour!]! @field(resolver: "ChartQuery@buyForFour")
     stockForFour: [SaleForFour!]! @field(resolver: "ChartQuery@stockForFour")
-    capital(filter: String): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getCapital")
+    capital(filter: String, startDate: String, endDate: String): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getCapital")
     saleChart(filter: String): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getSale")
     profitChart(filter: String): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getProfit")
 }
