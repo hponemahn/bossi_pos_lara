@@ -20,17 +20,23 @@ use App\Product;
 
 Route::get('/test', function () {
 
-    $res = DB::table("products")
-              ->join("categories", "products.category_id", "=", "categories.id")
-              ->select("categories.name as name", DB::raw('SUM(products.stock) as total'))
-              ->groupBy("name")
-              ->limit(4)
-              ->orderby("products.created_at", "desc")
-              ->get();
-
-    //   $object = new \stdClass();
-    //   $object->all = $res->sum('total');
-    //   $res[] = $object;
+      // $time = strtotime($args['endDate']);
+      // $dateE = date("Y-m-d", strtotime("+1 month", $time));
+      // $dateE = $args['endDate'];
+      $res;
+      
+      
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw("DATE_FORMAT(created_at, '%m') month"), DB::raw('MONTH(created_at) months'))
+        ->whereBetween('created_at', ['2019-12-05 3:30:34', '2020-06-05 3:30:34'])
+        // ->whereDate('created_at','>=','2019-06-05 3:30:34')
+        // ->whereDate('created_at','<=','2020-08-05 3:30:34')
+        ->groupby('month', 'year', 'months')
+        ->orderBy('year', 'DESC')
+        ->orderBy('months', 'DESC')
+        // ->limit(5)
+        ->get()
+        // ->reverse()
+        ->all();   
   
       return $res;    
 
