@@ -18,6 +18,7 @@ type Query {
     capital(filter: String, startDate: String, endDate: String): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getCapital")
     saleChart(filter: String, startDate: String, endDate: String): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getSale")
     profitChart(filter: String, startDate: String, endDate: String): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getProfit")
+    itemProfitChart(filter: String, startDate: String, endDate: String): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getItemProfit")
 }
 
 input OrderByClause{

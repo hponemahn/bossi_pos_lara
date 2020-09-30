@@ -20,23 +20,20 @@ use App\Product;
 
 Route::get('/test', function () {
 
-      // $time = strtotime($args['endDate']);
-      // $dateE = date("Y-m-d", strtotime("+1 month", $time));
-      // $dateE = $args['endDate'];
-      $res;
-      
-      
-        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw("DATE_FORMAT(created_at, '%m') month"), DB::raw('MONTH(created_at) months'))
-        ->whereBetween('created_at', ['2019-12-05 3:30:34', '2020-06-05 3:30:34'])
-        // ->whereDate('created_at','>=','2019-06-05 3:30:34')
-        // ->whereDate('created_at','<=','2020-08-05 3:30:34')
-        ->groupby('month', 'year', 'months')
-        ->orderBy('year', 'DESC')
-        ->orderBy('months', 'DESC')
-        // ->limit(5)
-        ->get()
-        // ->reverse()
-        ->all();   
+  $res = DB::table('orders')
+  ->join("order_details", "orders.id", "=", "order_details.order_id")
+  ->join("products", "order_details.product_id", "=", "products.id")
+  ->select('products.name as name', DB::raw('SUM(order_details.qty) as qty'), DB::raw('SUM((order_details.qty * order_details.price) - (order_details.qty * products.buy_price)) as total'), DB::raw("DATE_FORMAT(orders.order_date, '%Y') year"), DB::raw("DATE_FORMAT(orders.order_date, '%m') month"), DB::raw('MONTH(orders.order_date) months'))
+  // DB::raw('SUM((buy_price - discount_price) - sell_price) as total')
+  // ->whereBetween('order_date', [$dateS, $dateE])
+  ->groupby('name', 'month', 'year', 'months')
+  // ->groupby('')
+  ->orderBy('year', 'DESC')
+  ->orderBy('months', 'DESC')
+  // ->limit(5)
+  ->get()
+  // ->reverse()
+  ->all();   
   
       return $res;    
 
