@@ -41,6 +41,7 @@ input OrderInput {
 type NetForFiveMonths {
     id: ID!
     name: String
+    catName: String
     qty: String
     total: Float
     day: String
