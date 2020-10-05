@@ -807,6 +807,25 @@ class ChartQuery
             ->all();  
     }
 
+    public function getMostItem($_, array $args)
+    {
+      return DB::table('products')
+            ->select('name', DB::raw('SUM(stock) as qty'))
+            ->groupby('name')
+            ->orderBy('qty', 'DESC')
+            ->get()
+            ->all();  
+    }
+
+    public function getLeastItem($_, array $args)
+    {
+      return DB::table('products')
+            ->select('name', DB::raw('SUM(stock) as qty'))
+            ->groupby('name')
+            ->orderBy('qty', 'ASC')
+            ->get()
+            ->all();  
+    }
 
     
     public function netForFiveMonths($_, array $args)

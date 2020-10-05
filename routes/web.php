@@ -23,7 +23,7 @@ Route::get('/test', function () {
     $res = DB::table('products')
     ->select('name', DB::raw('SUM(stock) as qty'))
     ->groupby('name')
-    // ->orderBy('total', 'ASC')
+    ->orderBy('qty', 'DESC')
     ->get()
     ->all();  
 
