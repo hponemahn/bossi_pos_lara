@@ -691,6 +691,96 @@ class ChartQuery
       return $res; 
     }
 
+    public function getBuy($_, array $args)
+    {
+      $res;
+      
+      if($args['startDate'] != "0" && $args['endDate'] != "0" && $args['filter'] == "m"){
+
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw("DATE_FORMAT(created_at, '%m') month"), DB::raw('MONTH(created_at) months'))
+        ->whereBetween('created_at', [$args['startDate'], $args['endDate']])
+        ->groupby('month', 'year', 'months')
+        ->orderBy('year', 'DESC')
+        ->orderBy('months', 'DESC')
+        // ->limit(5)
+        ->get()
+        // ->reverse()
+        ->all();  
+
+      } elseif ($args['startDate'] != "0" && $args['endDate'] != "0" && $args['filter'] == "y") {
+
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"))
+        ->whereBetween('created_at', [$args['startDate'], $args['endDate']])
+        ->groupby('year')
+        ->orderBy('year', 'DESC')
+        ->get()
+        ->all();  
+        
+      } elseif ($args['startDate'] != "0" && $args['endDate'] != "0" && $args['filter'] == "d") {
+        
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%d') day"), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw("DATE_FORMAT(created_at, '%m') month"), DB::raw('MONTH(created_at) months'))
+        ->whereBetween('created_at', [$args['startDate'], $args['endDate']])
+        ->groupby('day', 'month', 'year', 'months')
+        ->orderBy('year', 'DESC')
+        ->orderBy('months', 'DESC')
+        ->orderBy('day', 'DESC')
+        ->get()
+        ->all();  
+        
+      } elseif ($args['filter'] == "y") {
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"))
+        ->groupby('year')
+        ->orderBy('year', 'DESC')
+        ->get()
+        ->all();  
+      } elseif ($args['filter'] == "d") {
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%d') day"), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw("DATE_FORMAT(created_at, '%m') month"), DB::raw('MONTH(created_at) months'))
+        ->groupby('day', 'month', 'year', 'months')
+        ->orderBy('year', 'DESC')
+        ->orderBy('months', 'DESC')
+        ->orderBy('day', 'DESC')
+        ->get()
+        ->all();  
+      } else {
+        $res = Product::select(DB::raw('SUM(buy_price) as total'), DB::raw("DATE_FORMAT(created_at, '%Y') year"), DB::raw("DATE_FORMAT(created_at, '%m') month"), DB::raw('MONTH(created_at) months'))
+        // ->whereBetween('order_date', [$dateS, $dateE])
+        ->groupby('month', 'year', 'months')
+        ->orderBy('year', 'DESC')
+        ->orderBy('months', 'DESC')
+        // ->limit(5)
+        ->get()
+        // ->reverse()
+        ->all();   
+      }
+
+      return $res;
+    }
+
+    public function getMostBuyingItem($_, array $args)
+    {
+      return DB::table('products')
+              ->select('name', 'stock as qty', DB::raw('SUM(buy_price * stock) as total'))
+              ->groupby('name', 'qty')
+              ->orderBy('total', 'DESC')
+              ->get()
+              ->all();  
+    }
+
+    public function getMostBuyingItemCat($_, array $args)
+    {
+      return DB::table('products')
+              ->join("categories", "products.category_id", "=", "categories.id")
+              ->select('categories.name as catName', DB::raw('SUM(products.buy_price * products.stock) as total'), DB::raw('ANY_VALUE(SUM(products.stock)) as qty'))
+              ->groupby('catName')
+              ->orderBy('total', 'DESC')
+              ->get()
+              ->all();  
+    }
+
+
+
+
+    
     public function netForFiveMonths($_, array $args)
     {
       
@@ -772,4 +862,5 @@ class ChartQuery
 
       return $res;   
     }
-}
+
+  }
