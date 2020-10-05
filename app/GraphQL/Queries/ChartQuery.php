@@ -777,7 +777,35 @@ class ChartQuery
               ->all();  
     }
 
+    public function getLeastBuyingItem($_, array $args)
+    {
+      return DB::table('products')
+              ->select('name', 'stock as qty', DB::raw('SUM(buy_price * stock) as total'))
+              ->groupby('name', 'qty')
+              ->orderBy('total', 'ASC')
+              ->get()
+              ->all();  
+    }
 
+    public function getLeastBuyingItemCat($_, array $args)
+    {
+      return DB::table('products')
+              ->join("categories", "products.category_id", "=", "categories.id")
+              ->select('categories.name as catName', DB::raw('SUM(products.buy_price * products.stock) as total'), DB::raw('ANY_VALUE(SUM(products.stock)) as qty'))
+              ->groupby('catName')
+              ->orderBy('total', 'ASC')
+              ->get()
+              ->all();  
+    }
+
+    public function getTotalItem($_, array $args)
+    {
+      return DB::table('products')
+            ->select('name', DB::raw('SUM(stock) as qty'))
+            ->groupby('name')
+            ->get()
+            ->all();  
+    }
 
 
     

@@ -21,10 +21,9 @@ use App\Product;
 Route::get('/test', function () {
 
     $res = DB::table('products')
-    ->join("categories", "products.category_id", "=", "categories.id")
-    ->select('categories.name as catName', DB::raw('SUM(products.buy_price * products.stock) as total'), DB::raw('ANY_VALUE(SUM(products.stock)) as qty'))
-    ->groupby('catName')
-    ->orderBy('total', 'DESC')
+    ->select('name', DB::raw('SUM(stock) as qty'))
+    ->groupby('name')
+    // ->orderBy('total', 'ASC')
     ->get()
     ->all();  
 

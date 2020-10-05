@@ -26,6 +26,9 @@ type Query {
     buyChart(filter: String, startDate: String, endDate: String): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getBuy")
     mostBuyingItemChart: [NetForFiveMonths!]! @field(resolver: "ChartQuery@getMostBuyingItem")    
     mostBuyingItemCatChart: [NetForFiveMonths!]! @field(resolver: "ChartQuery@getMostBuyingItemCat")    
+    leastBuyingItemChart: [NetForFiveMonths!]! @field(resolver: "ChartQuery@getLeastBuyingItem")        
+    leastBuyingItemCatChart: [NetForFiveMonths!]! @field(resolver: "ChartQuery@getLeastBuyingItemCat")  
+    totalItemChart: [NetForFiveMonths!]! @field(resolver: "ChartQuery@getTotalItem")          
 }
 
 input OrderByClause{
