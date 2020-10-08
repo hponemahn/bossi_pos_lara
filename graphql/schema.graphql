@@ -32,6 +32,8 @@ type Query {
     mostItemChart: [NetForFiveMonths!]! @field(resolver: "ChartQuery@getMostItem")          
     leastItemChart: [NetForFiveMonths!]! @field(resolver: "ChartQuery@getLeastItem")
     damagedItemChart: [NetForFiveMonths!]! @field(resolver: "ChartQuery@getDamagedItem")          
+    lostItemChart: [NetForFiveMonths!]! @field(resolver: "ChartQuery@getLostItem")          
+    expiredItemChart: [NetForFiveMonths!]! @field(resolver: "ChartQuery@getExpiredItem")          
 }
 
 input OrderByClause{

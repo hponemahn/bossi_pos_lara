@@ -838,6 +838,28 @@ class ChartQuery
               ->all();  
     }
 
+    public function getLostItem($_, array $args)
+    {
+      return DB::table('products')
+              ->select('name', DB::raw('SUM(stock) as qty'))
+              ->where('is_lost', 1)
+              ->groupby('name')
+              ->orderBy('qty', 'DESC')
+              ->get()
+              ->all();  
+    }
+
+    public function getExpiredItem($_, array $args)
+    {
+      return DB::table('products')
+              ->select('name', DB::raw('SUM(stock) as qty'))
+              ->where('is_expired', 1)
+              ->groupby('name')
+              ->orderBy('qty', 'DESC')
+              ->get()
+              ->all();  
+    }
+
     
     public function netForFiveMonths($_, array $args)
     {
