@@ -23,6 +23,8 @@ type Product {
     sku: String
     barcode: String
     is_damaged: Int
+    is_lost: Int
+    is_expired: Int
     remark: String
 }   
 

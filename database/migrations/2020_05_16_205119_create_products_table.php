@@ -28,6 +28,8 @@ class CreateProductsTable extends Migration
             $table->string('sku', 255)->nullable();
             $table->string('barcode', 255)->nullable();
             $table->tinyInteger('is_damaged')->nullable();
+            $table->tinyInteger('is_lost')->nullable();
+            $table->tinyInteger('is_expired')->nullable();
             $table->text('remark')->nullable();
             $table->nullableTimestamps();
 
