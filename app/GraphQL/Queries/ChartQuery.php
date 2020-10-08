@@ -827,6 +827,17 @@ class ChartQuery
             ->all();  
     }
 
+    public function getDamagedItem($_, array $args)
+    {
+      return DB::table('products')
+              ->select('name', DB::raw('SUM(stock) as qty'))
+              ->where('is_damaged', 1)
+              ->groupby('name')
+              ->orderBy('qty', 'DESC')
+              ->get()
+              ->all();  
+    }
+
     
     public function netForFiveMonths($_, array $args)
     {

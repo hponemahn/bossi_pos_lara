@@ -22,6 +22,7 @@ Route::get('/test', function () {
 
     $res = DB::table('products')
     ->select('name', DB::raw('SUM(stock) as qty'))
+    ->where('is_damaged', 1)
     ->groupby('name')
     ->orderBy('qty', 'DESC')
     ->get()
