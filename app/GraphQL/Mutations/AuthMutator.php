@@ -34,7 +34,7 @@ class AuthMutator
 
         //Auth
         // $credentials = Auth::User('email',$args['email']);
-        if ($args['email'] == null) {
+        if ($args['email'] == "null") {
             if (!Auth::attempt(['phone'=>$args['phone'],'password' => $args['password']]))
             return new Error('LOGIN_FAILS');
 
@@ -58,8 +58,6 @@ class AuthMutator
                 return new Error('USER_CANNOT_SAVE');
             return $user;
         }
-
-        
 
         
 
