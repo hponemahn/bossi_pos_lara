@@ -42,6 +42,17 @@ type Mutation{
         id: ID!
     ): Product @delete
 
-    
+    createCat (
+        name: String!
+    ): Category! @create
+
+    updateCat (
+        id: ID!
+        name: String!
+    ): Category! @update
+
+    deleteCat (
+        id: ID!
+    ): Category! @delete
 
 }

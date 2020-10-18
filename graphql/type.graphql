@@ -65,3 +65,8 @@ type SaleForFour {
     total: Float
     all: Float
 }
+
+type Category {
+    id: ID!
+    name: String!
+}
