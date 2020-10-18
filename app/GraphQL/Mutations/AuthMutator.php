@@ -66,6 +66,7 @@ class AuthMutator
     public function signup($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $user = new User($args);
+        $user->device_ID = $args['device_ID'];
         $user->business_name = $args['business_name'];
         $user->state_id = $args['state_id'];
         $user->role_id = $args['role_id'];

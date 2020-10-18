@@ -45,6 +45,7 @@ type Category{
 type User {
      id: ID!
     name: String!
+    device_ID: String
     role_id: Int
     business_name: String
     phone: String
