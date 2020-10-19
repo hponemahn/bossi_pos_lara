@@ -9,6 +9,7 @@ type Query {
     products(orderBy: [OrderByClause!] @orderBy): [Product!]! @all
     detailProduct (id: ID! @eq) : Product @find
 
+    allCat: [Category!]! @all
     categories(name: String @eq, orderBy: [OrderByClause!] @orderBy): [Category!]! @paginate
 
     orderForSevenDays: [Order!]! @field(resolver: "ChartQuery@orderForSevenDays")
