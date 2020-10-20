@@ -11,6 +11,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AuthMutator
 {
@@ -25,41 +26,55 @@ class AuthMutator
      */
      public function login($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-         $user = User::where('email', '=', $args['email'])
-         ->orWhere('phone', '=', $args['phone'])
-         ->first();
-        if(!$user)
-            return new Error('EMAIL_NOT_FOUND');
+         if($args['email'] == "null"){
+            $user = User::where('phone', '=', $args['phone'])
+             ->where('device_ID', '=', $args['device_ID'])
+             ->where('created_at', '>=', Carbon::now()->subDays(7)->startOfDay())
+             ->first();
+             
+            if(!$user)
+                {
+                    return new Error('EMAIL_NOT_FOUND');
+                }else{
 
+                $credentials = Arr::only($args, ['phone', 'password']);
 
-        //Auth
-        // $credentials = Auth::User('email',$args['email']);
-        if ($args['email'] == "null") {
-            if (!Auth::attempt(['phone'=>$args['phone'],'password' => $args['password']]))
-            return new Error('LOGIN_FAILS');
+                if (!Auth::once($credentials))
+                    return new Error('LOGIN_FAILS');
 
-            $token = Str::random(60);
+                $token = Str::random(60);
 
-            $user = auth()->user();
-            $user->api_token  = $token;
-            if(!$user->save())
-                return new Error('USER_CANNOT_SAVE');
-            return $user;
-        }
-        else {
-            if (!Auth::attempt(['email'=>$args['email'],'password' => $args['password']]))
-            return new Error('LOGIN_FAILS');
+                $user = auth()->user();
+                $user->api_token = $token;
+                if(!$user->save())
+                    return new Error('USER_CANNOT_SAVE');
+                return $user;
+                }
+            }else{
+                $user = User::where('email', '=', $args['email'])
+                 ->where('device_ID', '=', $args['device_ID'])
+                 ->where('created_at', '>=', Carbon::now()->subDays(7)->startOfDay())
+                 ->first();
+                 
+                if(!$user)
+                    {
+                        return new Error('EMAIL_NOT_FOUND');
+                    }else{
 
-            $token = Str::random(60);
+                    $credentials = Arr::only($args, ['email', 'password']);
 
-            $user = auth()->user();
-            $user->api_token  = $token;
-            if(!$user->save())
-                return new Error('USER_CANNOT_SAVE');
-            return $user;
-        }
+                    if (!Auth::once($credentials))
+                        return new Error('LOGIN_FAILS');
 
-        
+                    $token = Str::random(60);
+
+                    $user = auth()->user();
+                    $user->api_token = $token;
+                    if(!$user->save())
+                        return new Error('USER_CANNOT_SAVE');
+                    return $user;
+                    }
+            }
 
     }
 

@@ -1,6 +1,6 @@
 type Mutation{
 
-        login(email: String, phone: String , password: String): User @field(resolver: "AuthMutator@login")
+        login(email: String, phone: String , password: String, device_ID:String): User @field(resolver: "AuthMutator@login")
 
     signup(
         name: String
