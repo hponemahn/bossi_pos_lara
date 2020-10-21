@@ -13,9 +13,9 @@ class ProductsTableSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        for ($i = 0; $i < 500; $i++){
+        for ($i = 0; $i < 30; $i++){
             DB::table('products')->insert([ //,
-                'name' => $faker->word,
+                'name' => "ut",
                 'category_id' => 2,
                 'stock' => 50,
                 'buy_price' => 2000,

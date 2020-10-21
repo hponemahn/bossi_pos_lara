@@ -21,12 +21,12 @@ use App\Product;
 Route::get('/test', function () {
 
     $res = DB::table('products')
-    ->select('name', DB::raw('SUM(stock) as qty'))
-    ->where('is_damaged', 1)
-    ->groupby('name')
-    ->orderBy('qty', 'DESC')
-    ->get()
-    ->all();  
+    ->select('id', 'name', 'barcode', 'sku')
+    ->orWhere('name', 'test')
+    ->orWhere('barcode', 'barcode')
+    ->orWhere('sku', 'sku')
+    ->orderBy('id', 'DESC')
+    ->paginate(15);  
 
     return $res;
 
