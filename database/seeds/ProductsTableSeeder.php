@@ -22,7 +22,7 @@ class ProductsTableSeeder extends Seeder
                 'sell_price' => 6000,
                 'discount_price' => 5000,
                 'sku' => $faker->word,
-                
+                'created_at' => Carbon\Carbon::now()
             ]);
         }
     }

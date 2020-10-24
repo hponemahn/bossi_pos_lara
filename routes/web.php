@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,22 +9,20 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use App\Order;
-use App\Product;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
 
     $res = DB::table('products')
-    ->select('id', 'name', 'barcode', 'sku')
-    ->orWhere('name', 'test')
-    ->orWhere('barcode', 'barcode')
-    ->orWhere('sku', 'sku')
-    ->orderBy('id', 'DESC')
-    ->paginate(15);  
+        ->select('id', 'name', 'barcode', 'sku')
+        ->orWhere('name', 'test')
+        ->orWhere('barcode', 'barcode')
+        ->orWhere('sku', 'sku')
+        ->orderBy('id', 'DESC')
+        ->paginate(15);
 
     return $res;
 
