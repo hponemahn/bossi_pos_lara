@@ -55,7 +55,7 @@ type Query {
         filter: String
         startDate: String
         endDate: String
-    ): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getBestSellingItem")
+    ): [NetForFiveMonths!]! @paginate(builder: "App\\Order@getBestSellingItem")
     worstSellingItemChart(
         filter: String
         startDate: String
