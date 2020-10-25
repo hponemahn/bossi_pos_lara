@@ -35,12 +35,12 @@ type Query {
         filter: String
         startDate: String
         endDate: String
-    ): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getSale")
+    ): [NetForFiveMonths!]! @paginate(builder: "App\\Order@getSale")
     profitChart(
         filter: String
         startDate: String
         endDate: String
-    ): [NetForFiveMonths!]! @field(resolver: "ChartQuery@getProfit")
+    ): [NetForFiveMonths!]! @paginate(builder: "App\\Order@getProfit")
     itemProfitChart(
         filter: String
         startDate: String
