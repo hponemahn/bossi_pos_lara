@@ -67,25 +67,25 @@ type Query {
         endDate: String
     ): [NetForFiveMonths!]! @paginate(builder: "App\\Product@getBuy")
     mostBuyingItemChart: [NetForFiveMonths!]!
-        @field(resolver: "ChartQuery@getMostBuyingItem")
+        @paginate(builder: "App\\Product@getMostBuyingItem")
     mostBuyingItemCatChart: [NetForFiveMonths!]!
-        @field(resolver: "ChartQuery@getMostBuyingItemCat")
+        @paginate(builder: "App\\Product@getMostBuyingItemCat")
     leastBuyingItemChart: [NetForFiveMonths!]!
-        @field(resolver: "ChartQuery@getLeastBuyingItem")
+        @paginate(builder: "App\\Product@getLeastBuyingItem")
     leastBuyingItemCatChart: [NetForFiveMonths!]!
-        @field(resolver: "ChartQuery@getLeastBuyingItemCat")
+        @paginate(builder: "App\\Product@getLeastBuyingItemCat")
     totalItemChart: [NetForFiveMonths!]!
-        @field(resolver: "ChartQuery@getTotalItem")
+        @paginate(builder: "App\\Product@getTotalItem")
     mostItemChart: [NetForFiveMonths!]!
-        @field(resolver: "ChartQuery@getMostItem")
+        @paginate(builder: "App\\Product@getMostItem")
     leastItemChart: [NetForFiveMonths!]!
-        @field(resolver: "ChartQuery@getLeastItem")
+        @paginate(builder: "App\\Product@getLeastItem")
     damagedItemChart: [NetForFiveMonths!]!
-        @field(resolver: "ChartQuery@getDamagedItem")
+        @paginate(builder: "App\\Product@getDamagedItem")
     lostItemChart: [NetForFiveMonths!]!
-        @field(resolver: "ChartQuery@getLostItem")
+        @paginate(builder: "App\\Product@getLostItem")
     expiredItemChart: [NetForFiveMonths!]!
-        @field(resolver: "ChartQuery@getExpiredItem")
+        @paginate(builder: "App\\Product@getExpiredItem")
 }
 
 input OrderByClause {
