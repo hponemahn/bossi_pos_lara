@@ -15,14 +15,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
-
-    $res = DB::table('products')
-        ->select('id', 'name', 'barcode', 'sku')
-        ->orWhere('name', 'test')
-        ->orWhere('barcode', 'barcode')
-        ->orWhere('sku', 'sku')
-        ->orderBy('id', 'DESC')
-        ->paginate(15);
+    $isSell = 0;
+    $search = "";
+    if ($search === "" && $isSell === 0) {
+        $res = DB::table('products')->select('id', 'name', 'category_id', 'barcode', 'sku', 'stock', 'buy_price', 'sell_price', 'discount_price')
+        ->get();
+    } else {
+        return 1;
+    }
 
     return $res;
 

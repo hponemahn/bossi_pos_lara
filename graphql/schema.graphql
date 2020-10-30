@@ -6,7 +6,7 @@ type Query {
     usersPaginate: [User!]! @paginate
     user(id: ID @eq): User @find
 
-    products(search: String, orderBy: [OrderByClause!] @orderBy): [Product!]!
+    products(search: String, orderBy: [OrderByClause!] @orderBy, isSell: Int): [Product!]!
         @paginate(builder: "App\\Product@getProducts")
     detailProduct(id: ID! @eq): Product @find
 

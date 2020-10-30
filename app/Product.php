@@ -26,13 +26,34 @@ class Product extends Model
 
     public function getProducts($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Builder
     {
-        if (isset($args['search'])) {
+        if ($args['search'] === "" && $args['isSell'] === 1) {
             $res = DB::table('products')
+                ->select('id', 'name', 'category_id', 'barcode', 'sku', 'stock', 'buy_price', 'sell_price', 'discount_price')
+                ->where('is_damaged', '=', 0)
+                ->where('is_lost', '=', 0)
+                ->where('is_expired', '=', 0)
+                ->where('stock', '>', 0);
+        } else if (isset($args['search']) && $args['isSell'] === 1) {
+            $search = $args['search'];
+            $res = DB::table('products')
+                ->select('id', 'name', 'category_id', 'barcode', 'sku', 'stock', 'buy_price', 'sell_price', 'discount_price')
+                ->where('is_damaged', '=', 0)
+                ->where('is_lost', '=', 0)
+                ->where('is_expired', '=', 0)
+                ->where('stock', '>', 0)
+                ->where(function ($query) use ($search) {
+                    $query->where('name', '=', $search)
+                        ->orWhere('barcode', '=', $search)
+                        ->orWhere('sku', '=', $search);
+                });
+        } else if ($args['search'] != "" && $args['isSell'] == 0) {
+            $res = DB::table('products')
+                ->select('id', 'name', 'category_id', 'barcode', 'sku', 'stock', 'buy_price', 'sell_price', 'discount_price')
                 ->orWhere('name', $args['search'])
                 ->orWhere('barcode', $args['search'])
                 ->orWhere('sku', $args['search']);
         } else {
-            $res = DB::table('products');
+            $res = DB::table('products')->select('id', 'name', 'category_id', 'barcode', 'sku', 'stock', 'buy_price', 'sell_price', 'discount_price');
         }
 
         return $res;
