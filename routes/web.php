@@ -13,19 +13,11 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use App\Order;
 
 Route::get('/test', function () {
-    $isSell = 0;
-    $search = "";
-    if ($search === "" && $isSell === 0) {
-        $res = DB::table('products')->select('id', 'name', 'category_id', 'barcode', 'sku', 'stock', 'buy_price', 'sell_price', 'discount_price')
-        ->get();
-    } else {
-        return 1;
-    }
-
-    return $res;
-
+    return Order::get();
+    // return $order = Order::create(['total' => 1, 'order_date' => "2020-10-30 15:47:28"]);
 });
 
 Route::get('/', function () {
