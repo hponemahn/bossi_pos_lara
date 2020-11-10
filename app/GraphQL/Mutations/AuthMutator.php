@@ -11,7 +11,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class AuthMutator
 {
@@ -29,7 +28,6 @@ class AuthMutator
          if($args['email'] == "null"){
             $user = User::where('phone', '=', $args['phone'])
              ->where('device_ID', '=', $args['device_ID'])
-             ->where('created_at', '>=', Carbon::now()->subDays(7)->startOfDay())
              ->first();
              
             if(!$user)
@@ -53,7 +51,6 @@ class AuthMutator
             }else{
                 $user = User::where('email', '=', $args['email'])
                  ->where('device_ID', '=', $args['device_ID'])
-                 ->where('created_at', '>=', Carbon::now()->subDays(7)->startOfDay())
                  ->first();
                  
                 if(!$user)
@@ -85,6 +82,20 @@ class AuthMutator
         $user->business_name = $args['business_name'];
         $user->state_id = $args['state_id'];
         $user->role_id = $args['role_id'];
+
+        if($args['avatar'] == null){
+           $user->avatar = 'users\\default.png';
+        }else{
+            $year = date("Y");
+            $month =  date("F");
+            $tmp = $month.$year;
+            $file = $args['avatar'];        
+            $file_name = $file->hashName();
+            $path = $file->move(public_path('\storage\photo\\'.$tmp.'\\'), $file_name);
+            $photo_url = 'photo\\'.$tmp.'\\'.$file_name; //url('/storage/users/'.$file_name);
+            $user->avatar = $photo_url;
+        }
+
        
         //Auth
         $credentials = Arr::only($args, ['email', 'password']);
