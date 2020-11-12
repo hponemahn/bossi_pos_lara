@@ -24,12 +24,12 @@ class CreateProductsTable extends Migration
             $table->integer('stock')->nullable();
             $table->double('buy_price')->nullable();
             $table->double('sell_price')->nullable();
-            $table->double('discount_price')->nullable();
+            $table->double('discount_price')->nullable()->default(0);
             $table->string('sku', 255)->nullable();
-            $table->string('barcode', 255)->nullable();
-            $table->tinyInteger('is_damaged')->nullable();
-            $table->tinyInteger('is_lost')->nullable();
-            $table->tinyInteger('is_expired')->nullable();
+            $table->string('barcode', 255)->nullable()->default('');
+            $table->tinyInteger('is_damaged')->nullable()->default(0);
+            $table->tinyInteger('is_lost')->nullable()->default(0);
+            $table->tinyInteger('is_expired')->nullable()->default(0);
             $table->text('remark')->nullable();
             $table->nullableTimestamps();
 

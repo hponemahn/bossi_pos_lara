@@ -14,16 +14,24 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Order;
+use App\User;
 
 Route::get('/test', function () {
-    return Order::get();
-    // return $order = Order::create(['total' => 1, 'order_date' => "2020-10-30 15:47:28"]);
+
+    $user = User::select('id')->where('phone', '009')->orWhere('email', 'ph@ph.com')->get();
+
+    if (count($user) > 0) {
+        return "1";
+    } else {
+        return 0;
+    }
+    
+
+    // $user = User::create(
+    //     ['name' => $args['name'], 'logo' => $args['logo'], 'business_cat_id' => $args['business_cat_id'], 'phone' => $args['phone'], 'email' => $args['email'], 'password' => $args['password'], 'state_id' => $args['state_id'], 'township_id' => $args['township_id'], 'address' => $args['address'], 'api_token' => Str::random(60)]
+    // ); 
 });
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-Route::group(['prefix' => 'admin'], function () {
-    Voyager::routes();
 });

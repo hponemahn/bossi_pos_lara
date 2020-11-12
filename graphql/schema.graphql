@@ -1,10 +1,12 @@
 #import type.graphql
 #import mutation.graphql
 
-type Query {
+type Query @middleware(checks: ["auth:api"]) {
     users: [User!]! @all
     usersPaginate: [User!]! @paginate
     user(id: ID @eq): User @find
+    
+    me: User @field(resolver: "UserQuery@me")
 
     products(search: String, orderBy: [OrderByClause!] @orderBy, isSell: Int): [Product!]!
         @paginate(builder: "App\\Product@getProducts")
@@ -97,3 +99,4 @@ enum SortOrder {
     ASC
     DESC
 }
+

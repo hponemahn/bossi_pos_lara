@@ -17,27 +17,26 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('users');
-        
+        Schema::drop('users');
         Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name', 255);
+            $table->increments('id');
+            $table->string('name', 100)->nullable();
             $table->string('business_name', 255)->nullable();
-            $table->tinyInteger('business_cat_id')->nullable();
-            $table->string('phone', 255)->nullable();
-            $table->string('email', 255);
+            $table->string('logo', 100)->nullable();
+            $table->integer('business_cat_id')->nullable();
+            $table->string('phone', 50)->nullable();
+            $table->string('email', 100)->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password', 255);
+            $table->string('password', 100)->nullable();
+            $table->string('api_token', 80)->unique()->nullable()->default(null);
+            $table->rememberToken();
             $table->tinyInteger('state_id')->nullable();
             $table->tinyInteger('township_id')->nullable();
             $table->text('address')->nullable();
-            $table->string('logo', 255)->nullable();
-            $table->rememberToken();
             $table->nullableTimestamps();
-            $table->unique('email', 'users_email_unique');
             
-            $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_unicode_ci';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_general_ci';
         });
         
     }

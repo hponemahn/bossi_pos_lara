@@ -1,13 +1,26 @@
-type Mutation{
+type Mutation {
+    login(phone: String, email: String, password: String!): String
+        @field(resolver: "AuthMutator@login")
 
-    createOrder (
+    register(
+        name: String!
+        logo: String
+        business_cat_id: String
+        phone: String
+        email: String
+        password: String!
+        state_id: Int
+        township_id: Int
+        address: String
+    ): String @field(resolver: "AuthMutator@register")
+
+    createOrder(
         total: Float!
         order_date: String!
         products: [OrderInput]!
     ): String! @field(resolver: "OrderMutation@create")
 
-
-    createProduct (
+    createProduct(
         name: String!
         category_id: Int!
         stock: Int!
@@ -22,7 +35,7 @@ type Mutation{
         remark: String
     ): Product! @create
 
-    updateProduct (
+    updateProduct(
         id: ID!
         name: String!
         category_id: Int!
@@ -38,21 +51,11 @@ type Mutation{
         remark: String
     ): Product! @update
 
-    deleteProduct (
-        id: ID!
-    ): Product @delete
+    deleteProduct(id: ID!): Product @delete
 
-    createCat (
-        name: String!
-    ): Category! @create
+    createCat(name: String!): Category! @create
 
-    updateCat (
-        id: ID!
-        name: String!
-    ): Category! @update
+    updateCat(id: ID!, name: String!): Category! @update
 
-    deleteCat (
-        id: ID!
-    ): Category! @delete
-
+    deleteCat(id: ID!): Category! @delete
 }
