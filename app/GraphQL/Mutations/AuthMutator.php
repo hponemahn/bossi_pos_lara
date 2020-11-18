@@ -5,6 +5,7 @@ namespace App\GraphQL\Mutations;
 use App\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AuthMutator
@@ -15,11 +16,7 @@ class AuthMutator
      */
     public function login($_, array $args)
     {
-        if ($args['email'] == "0") {
-            $credentials = Arr::only($args, ['phone', 'password']);
-        } else {
-            $credentials = Arr::only($args, ['email', 'password']);
-        }
+        $credentials = Arr::only($args, ['email', 'password']);
 
         if (Auth::once($credentials)) {
             $token = Str::random(60);
@@ -37,17 +34,17 @@ class AuthMutator
     public function register($_, array $args)
     {
         $res;
-        $user = User::select('id')->where('phone', '009')->orWhere('email', 'ph@ph.com')->get();
+        $user = User::select('id')->Where('email', $args['email'])->get();
 
         if (count($user) > 0) {
             $res = "1";
         } else {
             $r = User::create(
-                ['name' => $args['name'], 'logo' => $args['logo'], 'business_cat_id' => $args['business_cat_id'], 'phone' => $args['phone'], 'email' => $args['email'], 'password' => $args['password'], 'state_id' => $args['state_id'], 'township_id' => $args['township_id'], 'address' => $args['address'], 'api_token' => Str::random(60)]
+                ['name' => $args['name'], 'logo' => $args['logo'], 'business_cat_id' => $args['business_cat_id'], 'device_id' => $args['device_id'], 'email' => $args['email'], 'password' => Hash::make($args['password']), 'state_id' => $args['state_id'], 'township_id' => $args['township_id'], 'api_token' => Str::random(60)]
             );
-
-            $res = $r->api_token;
         }
+
+        $res = $r->api_token;
 
         return $res;
 

@@ -1,19 +1,21 @@
 type Mutation {
-    login(phone: String, email: String, password: String!): String
+    login(email: String, password: String!): String
         @field(resolver: "AuthMutator@login")
 
     register(
         name: String!
+        device_id: String
         logo: String
         business_cat_id: String
-        phone: String
         email: String
         password: String!
         state_id: Int
         township_id: Int
         address: String
     ): String @field(resolver: "AuthMutator@register")
+}
 
+extend type Mutation @middleware(checks: ["auth:api"]) {
     createOrder(
         total: Float!
         order_date: String!
