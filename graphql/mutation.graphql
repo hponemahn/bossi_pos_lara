@@ -1,4 +1,9 @@
+scalar Upload @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
+
 type Mutation {
+
+    uploadFiles(logoImageFile: Upload!): String
+
     login(email: String, password: String!): String
         @field(resolver: "AuthMutator@login")
 
@@ -9,9 +14,8 @@ type Mutation {
         business_cat_id: String
         email: String
         password: String!
-        state_id: Int
-        township_id: Int
-        address: String
+        state_id: String
+        township_id: String
     ): String @field(resolver: "AuthMutator@register")
 }
 

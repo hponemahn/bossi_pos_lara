@@ -1,11 +1,16 @@
 #import type.graphql
 #import mutation.graphql
 
-type Query @middleware(checks: ["auth:api"]) {
+type Query {
+    states: [State!]! @all
+    businessTypes: [BusinessType!]! @all
+}
+
+extend type Query @middleware(checks: ["auth:api"]) {
     users: [User!]! @all
     usersPaginate: [User!]! @paginate
     user(id: ID @eq): User @find
-    
+
     me: User @field(resolver: "UserQuery@me")
 
     products(search: String, orderBy: [OrderByClause!] @orderBy, isSell: Int): [Product!]!

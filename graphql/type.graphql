@@ -13,6 +13,20 @@ type User {
     updated_at: DateTime!
 }
 
+type State {
+    id: ID!
+    name: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type BusinessType {
+    id: ID!
+    name: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
 type Product {
     id: ID!
     name: String!

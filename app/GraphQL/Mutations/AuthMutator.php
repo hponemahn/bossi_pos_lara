@@ -40,7 +40,7 @@ class AuthMutator
             $res = "1";
         } else {
             $r = User::create(
-                ['name' => $args['name'], 'logo' => $args['logo'], 'business_cat_id' => $args['business_cat_id'], 'device_id' => $args['device_id'], 'email' => $args['email'], 'password' => Hash::make($args['password']), 'state_id' => $args['state_id'], 'township_id' => $args['township_id'], 'api_token' => Str::random(60)]
+                ['name' => $args['name'], 'logo' => $args['logo'], 'business_cat_id' => $args['business_cat_id'], 'device_id' => $args['device_id'], 'email' => $args['email'], 'password' => Hash::make($args['password']), 'state_id' => $args['state_id'], 'township' => $args['township_id'], 'api_token' => Str::random(60)]
             );
         }
 
